@@ -32,8 +32,8 @@ server.get('/image', function(req, res){
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var sql_query = "";
-
+	var sql_query = "select captureRequested, captureCompleted from imageCapture where " +
+			"captureRequested != '' and captureCompleted is null";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		res.send(rows);
