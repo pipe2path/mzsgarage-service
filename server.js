@@ -37,7 +37,7 @@ server.get('/image', function(req, res){
 			"captureRequested != '' and captureCompleted is null";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
-		json = JSON.stringify(rows);
+		json = JSON.stringify(rows[0]);
 		res.send(json);
 	});
 
