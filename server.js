@@ -2,6 +2,7 @@
 var restify = require('restify');
 // sql server library
 var mysql = require('mysql');
+var json = '';
 // create an HTTP server.
 server = restify.createServer();
 
@@ -36,7 +37,8 @@ server.get('/image', function(req, res){
 			"captureRequested != '' and captureCompleted is null";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
-		res.send(rows);
+		json = JSON.stringify(rows);
+		res.send(json);
 	});
 
 })
