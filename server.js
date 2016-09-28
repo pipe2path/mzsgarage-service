@@ -3,6 +3,9 @@ var restify = require('restify');
 // sql server library
 var mysql = require('mysql');
 var json = '';
+var path = require("path");
+var fs = require("fs");
+
 // create an HTTP server.
 server = restify.createServer();
 
@@ -61,6 +64,37 @@ server.post('/update', function(req, res, cb){
 		if (err) throw err;
 		res.send("status updated");
 	});
+})
+
+
+// post captured image
+server.post('/image', function(req, res, cb){
+	var connection = getConnection();
+	connection.connect();
+
+	var data = req.body.toString();
+	//data = 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAA..kJggg==';
+
+	var imageData = data.replace(/^data:image\/\w+;base64,/, '');
+	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
+		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
+	dateLocal = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
+
+	//var filename = path.join(__dirname, 'img/img-' + dateLocal + ".jpg");
+	var filename = path.join(__dirname, "img/img-" + dateLocal + ".jpg");
+	fs.writeFile(filename, imageData, 'base64', function(err){
+		console.log(err);
+	});
+
+	res.setHeader('Access-Control-Allow-Origin','*');
+	res.send("img saved");
+
+	//var sql_query = "insert GarageStatus (dateTimeStamp, status) values ('" + statusData.datetimestamp + "', " + statusData.status + ")";
+	//connection.query(sql_query, function(err, rows, fields) {
+	//	if (err) throw err;
+	//	res.send("status updated");
+	//});
+
 })
 
 function getConnection(){
