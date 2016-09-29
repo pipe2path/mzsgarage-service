@@ -5,6 +5,8 @@ var mysql = require('mysql');
 var json = '';
 var path = require("path");
 var fs = require("fs");
+var aws = require('aws-sdk');
+
 
 // create an HTTP server.
 server = restify.createServer();
@@ -73,18 +75,27 @@ server.post('/image', function(req, res, cb){
 	connection.connect();
 
 	var data = req.body.toString();
-	//data = 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAA..kJggg==';
 
 	var imageData = data.replace(/^data:image\/\w+;base64,/, '');
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
 	dateLocal = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
-	//var filename = path.join(__dirname, 'img/img-' + dateLocal + ".jpg");
+	//set up aws s3 to copy file
+	//aws.config.accessKeyId = 'AKIAJRSYP4N7D6MRWN6Q'
+	//aws.config.secretAccessKey='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';
+    aws.config.region = 'us-west-2';
+
 	var filename = path.join(__dirname, "img/img-" + dateLocal + ".jpg");
-	fs.writeFile(filename, imageData, 'base64', function(err){
-		console.log(err);
+	var params = {Key: filename, ContentType: jpeg, Body: file};
+	var s3bucket = aws.s3({params:{Bucket:'mzsgarage-images'}});
+	s3bucket.upload(params, function(err, data){
+
 	});
+
+	//fs.writeFile(filename, imageData, 'base64', function(err){
+	//	console.log(err);
+	//});
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 	res.send("img saved");
