@@ -82,13 +82,13 @@ server.post('/image', function(req, res, cb){
 	dateLocal = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
 	//set up aws s3 to copy file
-	//aws.config.accessKeyId = 'AKIAJRSYP4N7D6MRWN6Q'
-	//aws.config.secretAccessKey='4SIiWEEK79UK2YB7h8BnN814Gu0M/5nV8FvxvJls';
+	aws.config.accessKeyId = 'AKIAJRSYP4N7D6MRWN6Q'
+	aws.config.secretAccessKey='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';
     aws.config.region = 'us-west-2';
 
-	var filename = path.join(__dirname, "img/img-" + dateLocal + ".jpg");
-	var params = {Key: filename, ContentType: jpeg, Body: file};
-	var s3bucket = aws.s3({params:{Bucket:'mzsgarage-images'}});
+	var filename = path.join("img-" + dateLocal + ".jpg");
+	var params = {Key: filename, ContentType: 'image/jpeg', Body: data};
+	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: imageData}});
 	s3bucket.upload(params, function(err, data){
 
 	});
