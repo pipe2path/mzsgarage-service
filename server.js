@@ -81,6 +81,8 @@ server.post('/image', function(req, res, cb){
 	aws.config.secretAccessKey='4SIiWEEK79UK2YB7h8BnN814Gu0M/5nV8FvxvJls';
     aws.config.region = 'us-west-2';
 
+	res.setHeader('Access-Control-Allow-Origin','*');
+
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
 	var dateForFile = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
@@ -89,23 +91,26 @@ server.post('/image', function(req, res, cb){
 	var params = {Key: filename, ContentType: 'image/jpeg', Body: data};
 	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data}});
 	s3bucket.upload(params, function(err, data){
-
+		res.send('image saved');
 	});
 
-	// update database with date completed
-	var imageCaptureId = req.params.id;
+})
 
+server.post('/imageStatus', function(req, res, cb) {
 	var connection = getConnection();
 	connection.connect();
+
+	var imageCaptureId = req.params.id;
+	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
+		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
+
+	res.setHeader('Access-Control-Allow-Origin','*');
+
 	var sql_query = "update imageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
-		return;
+		res.send('imageStatus saved');
 	});
-
-	res.setHeader('Access-Control-Allow-Origin','*');
-	res.send("img saved");
-
 })
 
 function getConnection(){
