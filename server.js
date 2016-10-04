@@ -110,6 +110,22 @@ server.post('/imageStatus', function(req, res, cb) {
 	});
 })
 
+server.post('/needimage', function(req, res, cb) {
+	var connection = getConnection();
+	connection.connect();
+
+	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
+		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
+
+	res.setHeader('Access-Control-Allow-Origin','*');
+
+	var sql_query = "insert imageCapture (captureRequested) values ('" + dateLocal + "')" ;
+	connection.query(sql_query, function(err, rows, fields) {
+		if (err) throw err;
+		res.send('image requested');
+	});
+})
+
 function getConnection(){
 	var connection = mysql.createConnection({
 		host     : 'mzsgarage.db.2259289.hostedresource.com',
