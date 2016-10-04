@@ -43,10 +43,7 @@ server.get('/image', function(req, res){
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		//json = JSON.stringify(rows[0]);
-		if (rows.length == 0)
-			res.send("null")
-		else
-			res.send(rows[0]);
+		res.send(rows[0]);
 	});
 })
 
