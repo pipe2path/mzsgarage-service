@@ -32,7 +32,7 @@ server.get('/status/', function (req, res, cb) {
 	});
 });
 
-server.get('/image', function(req, res){
+server.get('/imageStatus', function(req, res){
 	var connection = getConnection();
 	connection.connect();
 
