@@ -72,6 +72,7 @@ server.post('/update', function(req, res, cb){
 server.post('/image', function(req, res, cb){
 
 	var data = req.body;
+	var dataBase64 = new Buffer(data).toString('base64');
 
 	//set up aws s3 to copy file
 	aws.config.accessKeyId = 'AKIAJRSYP4N7D6MRWN6Q'
@@ -85,8 +86,8 @@ server.post('/image', function(req, res, cb){
 	var dateForFile = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
 	var filename = path.join("img-" + dateForFile + ".jpg");
-	var params = {Key: filename, ContentType: 'image/jpeg', Body: data};
-	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data}});
+	var params = {Key: filename, ContentType: 'image/jpeg', Body: dataBase64};
+	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: dataBase64}});
 	s3bucket.upload(params, function(err, data){
 		res.send('image saved');
 	});
