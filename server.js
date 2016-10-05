@@ -72,7 +72,7 @@ server.post('/update', function(req, res, cb){
 server.post('/image', function(req, res, cb){
 
 	var data = req.body;
-	var dataBase64 = new Buffer(data).toString('base64');
+	//var dataBase64 = new Buffer(data).toString('base64');
 
 	//set up aws s3 to copy file
 	aws.config.accessKeyId = 'AKIAJRSYP4N7D6MRWN6Q'
