@@ -72,7 +72,8 @@ server.post('/update', function(req, res, cb){
 server.post('/image', function(req, res, cb){
 
 	// get image data and manipulate it to remove 0D and 0A bytes
-	var data = req.body;
+	var imageCaptureId = req.params.id;
+    var data = req.body;
 	var data2 = data.slice(1);
 	var data3 = data2.slice(1);
 
