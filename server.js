@@ -73,9 +73,9 @@ server.post('/image', function(req, res, cb){
 
 	var data = req.body;
 
-	if (data[0].toString() == "0A" && data[1].toString() == "0D"){
-		data.splice(0, 1);
-		data.splice(0, 1);
+	if (data[0].toString() == "0" && data[1].toString() == "D"
+	  && data[3].toString() == "0" && data[4].toString() == "A"){
+		var data2 = data.replace('0D 0A ', '');
 	}
 
 	//var dataBase64 = new Buffer(data).toString('base64');
@@ -92,8 +92,8 @@ server.post('/image', function(req, res, cb){
 	var dateForFile = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
 	var filename = path.join("img-" + dateForFile + ".jpg");
-	var params = {Key: filename, ContentType: 'image/jpeg', Body: data};
-	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data}});
+	var params = {Key: filename, ContentType: 'image/jpeg', Body: data2};
+	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data2}});
 	s3bucket.upload(params, function(err, data){
 		res.send('image saved');
 	});
