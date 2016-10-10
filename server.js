@@ -72,8 +72,7 @@ server.post('/update', function(req, res, cb){
 server.post('/image', function(req, res, cb){
 
 	var data = req.body;
-	var data2 = data.replace('0D 0A ', '');
-
+	var data2 = data.slice(1);
 
 	//var dataBase64 = new Buffer(data).toString('base64');
 
