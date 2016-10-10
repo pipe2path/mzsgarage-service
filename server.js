@@ -71,11 +71,10 @@ server.post('/update', function(req, res, cb){
 // post captured image
 server.post('/image', function(req, res, cb){
 
+	// get image data and manipulate it to remove 0D and 0A bytes
 	var data = req.body;
 	var data2 = data.slice(1);
 	var data3 = data2.slice(1);
-
-	//var dataBase64 = new Buffer(data).toString('base64');
 
 	//set up aws s3 to copy file
 	aws.config.accessKeyId = 'AKIAJRSYP4N7D6MRWN6Q'
@@ -92,6 +91,16 @@ server.post('/image', function(req, res, cb){
 	var params = {Key: filename, ContentType: 'image/jpeg', Body: data3};
 	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data3}});
 	s3bucket.upload(params, function(err, data){
+		if (err == null) {
+			var connection = getConnection();
+			connection.connect();
+
+			var sql_query = "update imageCapture set imagePath = https://s3-us-west-1.amazonaws.com/mzsgarage-images/'" + dateLocal + "' where imageCaptureId = " + imageCaptureId;
+			connection.query(sql_query, function (err, rows, fields) {
+				if (err) throw err;
+				//res.send('imageStatus saved');
+			});
+		}
 		res.send('image saved');
 	});
 
