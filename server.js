@@ -88,7 +88,7 @@ server.post('/image', function(req, res, cb){
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
 	var dateForFile = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
-	var filename = path.join("img-" + dateForFile + ".jpg");
+	var filename = path.join("img-" + dateForFile + imageCaptureId + ".jpg");
 
 	var connection = getConnection();
 	connection.connect();
