@@ -9,7 +9,7 @@ var aws = require('aws-sdk');
 
 
 // create an HTTP server.
-server = restify.createServer();
+var server = restify.createServer();
 
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
@@ -89,19 +89,19 @@ server.post('/image', function(req, res, cb){
 	var dateForFile = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
 	var filename = path.join("img-" + dateForFile + ".jpg");
+
+	var connection = getConnection();
+	connection.connect();
+	var sql_query = "update imageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "' where imageCaptureId = " + imageCaptureId;
+	connection.query(sql_query, function (err, rows, fields) {
+		if (err) throw err;
+		//res.send('imageStatus saved');
+	});
+
 	var params = {Key: filename, ContentType: 'image/jpeg', Body: data3};
 	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data3}});
 	s3bucket.upload(params, function(err, data){
-		if (err == null) {
-			var connection = getConnection();
-			connection.connect();
-
-			var sql_query = "update imageCapture set imagePath = https://s3-us-west-1.amazonaws.com/mzsgarage-images/'" + dateLocal + "' where imageCaptureId = " + imageCaptureId;
-			connection.query(sql_query, function (err, rows, fields) {
-				if (err) throw err;
-				//res.send('imageStatus saved');
-			});
-		}
+	 	if (err) throw err;
 		res.send('image saved');
 	});
 
