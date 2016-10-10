@@ -73,7 +73,7 @@ server.post('/image', function(req, res, cb){
 
 	var data = req.body;
 
-	if (data[0].toString() == "OA" && data[1].toString() == "OD"){
+	if (data[0].toString() == "0A" && data[1].toString() == "0D"){
 		data.splice(0, 1);
 		data.splice(0, 1);
 	}
