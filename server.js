@@ -73,7 +73,7 @@ server.post('/image', function(req, res, cb){
 
 	var data = req.body;
 	var data2 = data.slice(1);
-	var data3 = data.slice(1);
+	var data3 = data2.slice(1);
 
 	//var dataBase64 = new Buffer(data).toString('base64');
 
