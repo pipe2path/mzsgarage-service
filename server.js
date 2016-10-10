@@ -92,8 +92,8 @@ server.post('/image', function(req, res, cb){
 	var dateForFile = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
 	var filename = path.join("img-" + dateForFile + ".jpg");
-	var params = {Key: filename, ContentType: 'image/jpeg', Body: data2};
-	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data2}});
+	var params = {Key: filename, ContentType: 'image/jpeg', Body: data};
+	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data}});
 	s3bucket.upload(params, function(err, data){
 		res.send('image saved');
 	});
