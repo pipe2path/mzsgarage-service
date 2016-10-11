@@ -135,7 +135,7 @@ server.post('/needimage', function(req, res, cb) {
 	var sql_query = "insert imageCapture (captureRequested) values ('" + dateLocal + "')";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
-		res.send(rows.insertId);
+		res.send("image requested");
 	});
 })
 
