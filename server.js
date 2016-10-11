@@ -66,8 +66,6 @@ server.post('/update', function(req, res, cb){
 		res.send("status updated");
 	});
 })
-
-
 // post captured image
 server.post('/image', function(req, res, cb){
 
@@ -136,6 +134,22 @@ server.post('/needimage', function(req, res, cb) {
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		res.send(rows.insertId.toString());
+	});
+})
+
+server.get('/image', function(req, res){
+	var connection = getConnection();
+	connection.connect();
+
+	var imageCaptureId = req.params.id;
+	res.setHeader('Access-Control-Allow-Origin','*');
+
+	var sql_query = "select imagePath from imageCapture where " +
+		"imageCaptureId = " + imageCaptureId ;
+	connection.query(sql_query, function(err, rows, fields) {
+		if (err) throw err;
+		//json = JSON.stringify(rows[0]);
+		res.send(rows[0]);
 	});
 })
 
