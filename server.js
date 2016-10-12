@@ -144,11 +144,10 @@ server.get('/image', function(req, res){
 	var imageCaptureId = req.params.id;
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var sql_query = "select imagePath from imageCapture where " +
+	var sql_query = "select captureCompleted, imagePath from imageCapture where " +
 		"imageCaptureId = " + imageCaptureId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
-		//json = JSON.stringify(rows[0]);
 		res.send(rows[0]);
 	});
 })
