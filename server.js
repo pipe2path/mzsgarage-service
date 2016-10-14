@@ -7,7 +7,6 @@ var path = require("path");
 var fs = require("fs");
 var aws = require('aws-sdk');
 
-
 // create an HTTP server.
 var server = restify.createServer();
 
@@ -66,6 +65,7 @@ server.post('/update', function(req, res, cb){
 		res.send("status updated");
 	});
 })
+
 // post captured image
 server.post('/image', function(req, res, cb){
 
