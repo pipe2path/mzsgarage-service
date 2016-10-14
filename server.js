@@ -79,7 +79,7 @@ server.post('/image', function(req, res, cb){
 	//aws.config.accessKeyId = 'AKIAJRSYP4N7D6MRWN6Q'
 	//aws.config.secretAccessKey='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';
     //aws.config.region = 'us-west-2';
-	aws.config.loadFromPath('./config.json');
+	aws.config.loadFromPath('config.json');
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
