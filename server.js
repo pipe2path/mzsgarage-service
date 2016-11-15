@@ -62,9 +62,44 @@ server.post('/update', function(req, res, cb){
 	var sql_query = "insert GarageStatus (dateTimeStamp, status) values ('" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
+		if (statusData.status = 1){
+			monitorGarageOpen(rows.insertId.toString(), function(data){
+				// if true then send sms, if false return
+			});
+		}
 		res.send("status updated");
 	});
 })
+
+function monitorGarageOpen(openId){
+	var openTooLong = false;
+	var connection = getConnection();
+	connection.connect();
+	var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId ;
+
+	connection.query(sql_query, function(err, rows, fields) {
+		if (err) throw err;
+		if (rows != null){
+			var starttime = rows[0].dateTimeStamp;
+			var sql_query2 = "select max(garageStatusId) from GarageStatus";
+			connection.query(sql_query2, function(err2, rows2, fields2) {
+				if (rows2 != null){
+					var gStatus = rows[0].garageStatus;
+					if (gStatus == 0)
+						monitorGarageOpen(openId);
+					else{
+						// check time diff and send sms if more than 5 minutes
+						var timeNow = new Date();
+						var timeDiff = timeNow - new Date(starttime);
+					}
+				}
+			})
+		}
+
+	});
+	return openTooLong;
+}
+
 
 // post captured image
 server.post('/image', function(req, res, cb){
