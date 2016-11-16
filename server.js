@@ -94,8 +94,8 @@ function monitorGarageOpen(openId){
 				// check time diff and send sms if more than 5 minutes
 					var timeNow = new Date();
 					var timeDiff = (timeNow - new Date(starttime))/1000;
-					if (timeDiff > 600){
-						sinchSms.send('+19094524127', 'Yo boss, your garage is open for more than 5 minutes!').then(function(response){
+					if (timeDiff > 30){
+						sinchSms.send('+19094524127', 'Garage open for more than 30 seconds!').then(function(response){
 							console.log(response);
 						}).fail(function(error){
 							console.log(error);
