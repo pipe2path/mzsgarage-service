@@ -6,6 +6,10 @@ var json = '';
 var path = require("path");
 var fs = require("fs");
 var aws = require('aws-sdk');
+var sinchSms = require('sinch-sms')({
+	key: 'ae52ae57-35da-4395-aa6e-1dca2c3ec44d',
+	secret: 'BYqHIag64EGLeJ/yS7IIyQ=='
+});
 
 // create an HTTP server.
 var server = restify.createServer();
@@ -59,15 +63,16 @@ server.post('/update', function(req, res, cb){
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
+	var msg = "status updated";
 	var sql_query = "insert GarageStatus (dateTimeStamp, status) values ('" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		if (statusData.status = 1){
 			monitorGarageOpen(rows.insertId.toString(), function(data){
-				// if true then send sms, if false return
+				msg = 'text message sent';
 			});
 		}
-		res.send("status updated");
+		res.send(msg);
 	});
 })
 
@@ -81,17 +86,27 @@ function monitorGarageOpen(openId){
 		if (err) throw err;
 		if (rows != null){
 			var starttime = rows[0].dateTimeStamp;
-			var sql_query2 = "select max(garageStatusId) from GarageStatus";
+			var sql_query2 = "select * from GarageStatus order by garageStatusId desc limit 1";
 			connection.query(sql_query2, function(err2, rows2, fields2) {
 				if (rows2 != null){
-					var gStatus = rows[0].garageStatus;
-					if (gStatus == 0)
-						monitorGarageOpen(openId);
-					else{
-						// check time diff and send sms if more than 5 minutes
+					var gStatus = rows2[0].status;
+					if (gStatus == 1)
+					// check time diff and send sms if more than 5 minutes
 						var timeNow = new Date();
-						var timeDiff = timeNow - new Date(starttime);
+					var timeDiff = (timeNow - new Date(starttime))/1000;
+					if (timeDiff > 600){
+						sinchSms.send('+19094524127', 'Yo boss, your garage is open for more than 5 minutes!').then(function(response){
+							console.log(response);
+						}).fail(function(error){
+							console.log(error);
+						});
 					}
+					else{
+						monitorGarageOpen(openId);
+					}
+				}
+				else{
+					return;
 				}
 			})
 		}
@@ -99,6 +114,7 @@ function monitorGarageOpen(openId){
 	});
 	return openTooLong;
 }
+
 
 
 // post captured image
