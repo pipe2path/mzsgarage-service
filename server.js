@@ -88,11 +88,11 @@ function monitorGarageOpen(openId){
 			var starttime = rows[0].dateTimeStamp;
 			var sql_query2 = "select * from GarageStatus order by garageStatusId desc limit 1";
 			connection.query(sql_query2, function(err2, rows2, fields2) {
-				if (rows2 != null){
-					var gStatus = rows2[0].status;
-					if (gStatus == 1)
-					// check time diff and send sms if more than 5 minutes
-						var timeNow = new Date();
+			if (rows2 != null){
+				var gStatus = rows2[0].status;
+				if (gStatus == 1)
+				// check time diff and send sms if more than 5 minutes
+					var timeNow = new Date();
 					var timeDiff = (timeNow - new Date(starttime))/1000;
 					if (timeDiff > 600){
 						sinchSms.send('+19094524127', 'Yo boss, your garage is open for more than 5 minutes!').then(function(response){
