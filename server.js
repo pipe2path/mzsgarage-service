@@ -68,7 +68,7 @@ server.post('/update', function(req, res, cb){
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		if (statusData.status = 1){
-			monitorGarageOpen(rows.insertId.toString(), function(data){
+			monitorGarageOpen(rows.insertId.toString(), connection, function(data){
 				msg = 'text message sent';
 			});
 		}
@@ -76,42 +76,42 @@ server.post('/update', function(req, res, cb){
 	});
 })
 
-function monitorGarageOpen(openId){
+function monitorGarageOpen(openId, connection){
 	var openTooLong = false;
-	var connection = getConnection();
-	connection.connect();
-	var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId ;
 
+	var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		if (rows != null){
 			var starttime = rows[0].dateTimeStamp;
 			var sql_query2 = "select * from GarageStatus order by garageStatusId desc limit 1";
 			connection.query(sql_query2, function(err2, rows2, fields2) {
-			if (rows2 != null){
-				var gStatus = rows2[0].status;
-				if (gStatus == 1)
-				// check time diff and send sms if more than 5 minutes
-					var timeNow = new Date();
-					var timeDiff = (timeNow - new Date(starttime))/1000;
-					if (timeDiff > 600){
-						sinchSms.send('+19094524127', 'Garage open for more than 30 seconds!').then(function(response){
-							console.log(response);
-						}).fail(function(error){
-							console.log(error);
-						});
+				if (err2) throw err2;
+				if (rows2 != null){
+					var gStatus = rows2[0].status;
+					if (gStatus == 1){
+					// check time diff and send sms if more than 5 minutes
+						var timeNow = new Date();
+						var timeDiff = (timeNow - new Date(starttime))/1000;
+						if (parseInt(timeDiff)>600) {
+							sinchSms.send('+19094524127', 'Garage open for more than 5 minutes!').then(function (response) {
+								console.log(response);
+							}).fail(function (error) {
+								console.log(error);
+							});
+						}
+						else{
+							monitorGarageOpen(openId, connection);
+						}
 					}
 					else{
-						monitorGarageOpen(openId);
+						return;
 					}
-				}
-				else{
-					return;
 				}
 			})
 		}
-
 	});
+
 	return openTooLong;
 }
 
