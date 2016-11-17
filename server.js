@@ -6,10 +6,7 @@ var json = '';
 var path = require("path");
 var fs = require("fs");
 var aws = require('aws-sdk');
-var sinchSms = require('sinch-sms')({
-	key: 'ae52ae57-35da-4395-aa6e-1dca2c3ec44d',
-	secret: 'BYqHIag64EGLeJ/yS7IIyQ=='
-});
+var sinchSms = require('sinch-sms');
 
 // create an HTTP server.
 var server = restify.createServer();
@@ -64,19 +61,35 @@ server.post('/update', function(req, res, cb){
 	res.setHeader('Access-Control-Allow-Origin','*');
 
 	var msg = "status updated";
+	var sinchKey;
+	var sinchSecret;
+	var openTime = 600;
 	var sql_query = "insert GarageStatus (dateTimeStamp, status) values ('" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		if (statusData.status = 1){
-			monitorGarageOpen(rows.insertId.toString(), connection, function(data){
-				msg = 'text message sent';
+			sql_query='select * from configSettings limit 1';
+			connection.query(sql_query, function(err, rows2, fields) {
+				if (rows2!=null){
+					sinchKey = rows2[0].sinchKey;
+					sinchSecret = rows2[0].sinchPwd;
+					sinchSms = require('sinch-sms')({
+						key: sinchKey,
+						secret:sinchSecret
+					});
+					openTime = rows2[0].garageOpenTimeAlert;
+
+					monitorGarageOpen(rows.insertId.toString(), connection, sinchSms, openTime, function(data){
+						msg = 'text message sent';
+					});
+				}
 			});
 		}
 		res.send(msg);
 	});
 })
 
-function monitorGarageOpen(openId, connection){
+function monitorGarageOpen(openId, connection, sinchSms, openTime){
 	var openTooLong = false;
 
 	var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId ;
@@ -90,18 +103,17 @@ function monitorGarageOpen(openId, connection){
 				if (rows2 != null){
 					var gStatus = rows2[0].status;
 					if (gStatus == 1){
-					// check time diff and send sms if more than 5 minutes
 						var timeNow = new Date();
 						var timeDiff = (timeNow - new Date(starttime))/1000;
-						if (parseInt(timeDiff)>600) {
-							sinchSms.send('+19094524127', 'Garage open for more than 5 minutes!').then(function (response) {
+						if (parseInt(timeDiff)>openTime) {
+							sinchSms.send('+19094524127', 'Yo Boss!, Garage open for 10 minutes!').then(function (response) {
 								console.log(response);
 							}).fail(function (error) {
 								console.log(error);
 							});
 						}
 						else{
-							monitorGarageOpen(openId, connection);
+							monitorGarageOpen(openId, connection, sinchSms, openTime);
 						}
 					}
 					else{
@@ -111,11 +123,8 @@ function monitorGarageOpen(openId, connection){
 			})
 		}
 	});
-
 	return openTooLong;
 }
-
-
 
 // post captured image
 server.post('/image', function(req, res, cb){
