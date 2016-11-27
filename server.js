@@ -63,7 +63,7 @@ server.post('/update', function(req, res, cb){
 	var msg = "status updated";
 	var sinchKey;
 	var sinchSecret;
-	var openTime = 600;
+	var openTime = 300;
 	var sql_query = "insert GarageStatus (dateTimeStamp, status) values ('" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
@@ -106,7 +106,7 @@ function monitorGarageOpen(openId, connection, sinchSms, openTime){
 						var timeNow = new Date();
 						var timeDiff = (timeNow - new Date(starttime))/1000;
 						if (parseInt(timeDiff)>openTime) {
-							sinchSms.send('+19094524127', 'Yo Boss!, Garage open for 10 minutes!').then(function (response) {
+							sinchSms.send('+19094524127', 'Zomon is the weakest! Garage open for 5 minutes!').then(function (response) {
 								console.log(response);
 							}).fail(function (error) {
 								console.log(error);
