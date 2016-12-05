@@ -112,11 +112,11 @@ function monitorGarageOpen(openId, connection, sinchSms, openTime){
 								console.log(error);
 							});
 
-							//sinchSms.send('+19093466494', 'HEY JUDE!!! Garage open for 10 minutes!').then(function (response) {
-							//	console.log(response);
-							//}).fail(function (error) {
-							//	console.log(error);
-							//});
+							sinchSms.send('+19093466494', 'HEY JUDE!!! Garage open for ' + openTime/60 + ' minutes!').then(function (response) {
+								console.log(response);
+							}).fail(function (error) {
+								console.log(error);
+							});
 						}
 						else{
 							monitorGarageOpen(openId, connection, sinchSms, openTime);
