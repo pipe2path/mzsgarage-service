@@ -106,7 +106,7 @@ function monitorGarageOpen(openId, connection, sinchSms, openTime){
 						var timeNow = new Date();
 						var timeDiff = (timeNow - new Date(starttime))/1000;
 						if (parseInt(timeDiff)>openTime) {
-							sinchSms.send('+19094524127', 'HEY BOSS!!!!!!! Garage open for ' + openTime/60 + ' minutes!').then(function (response) {
+							sinchSms.send('+19094524127', 'HEY ZOMON, THE MASTER! Garage open for ' + openTime/60 + ' minutes!').then(function (response) {
 								console.log(response);
 							}).fail(function (error) {
 								console.log(error);
