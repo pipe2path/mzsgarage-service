@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98e1e460-6eae-41f0-9d6a-45001975fd95" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
     </list>
     <ignored path="mzsgarage-service.iws" />
@@ -30,8 +29,8 @@
       <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="236" column="28" lean-forward="true" selection-start-line="236" selection-start-column="28" selection-end-line="236" selection-end-column="28" />
+            <state relative-caret-position="275">
+              <caret line="230" column="61" lean-forward="true" selection-start-line="230" selection-start-column="61" selection-end-line="230" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -275,7 +274,7 @@
       <workItem from="1497324768076" duration="1375000" />
       <workItem from="1497808326395" duration="256000" />
       <workItem from="1497808607544" duration="1194000" />
-      <workItem from="1497938284696" duration="2958000" />
+      <workItem from="1497938284696" duration="3571000" />
     </task>
     <task id="LOCAL-00001" summary="updated monitor function to send text msg via sinch. &#10;Changed timer to 10 minutes">
       <created>1479278294782</created>
@@ -288,7 +287,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43757000" />
+    <option name="totallyTimeSpent" value="44370000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
@@ -353,7 +352,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/server.js</url>
-          <line>231</line>
+          <line>232</line>
           <properties />
           <option name="timeStamp" value="38" />
         </line-breakpoint>
@@ -749,8 +748,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="236" column="28" lean-forward="true" selection-start-line="236" selection-start-column="28" selection-end-line="236" selection-end-column="28" />
+        <state relative-caret-position="275">
+          <caret line="230" column="61" lean-forward="true" selection-start-line="230" selection-start-column="61" selection-end-line="230" selection-end-column="61" />
           <folding />
         </state>
       </provider>

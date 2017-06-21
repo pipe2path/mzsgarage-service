@@ -218,6 +218,7 @@ server.get('/image', function(req, res){
 
 server.post('/machinestatus', function(req, res){
 	var machineStatus = req.params.status;
+	var floor = req.params.floor;
     var connection = getConnection();
     connection.connect();
 
@@ -226,7 +227,7 @@ server.post('/machinestatus', function(req, res){
 
     res.setHeader('Access-Control-Allow-Origin','*');
 
-    var sql_query = "insert machineStatus (dateTimeStamp, status) values ('" + dateLocal + "'," + machineStatus + ")" ;
+    var sql_query = "insert machineStatus (dateTimeStamp, floor, status) values ('" + dateLocal + "'," + floor + ", " + machineStatus + ")" ;
     connection.query(sql_query, function(err, rows, fields) {
         if (err) throw err;
         res.send('imageStatus saved');
