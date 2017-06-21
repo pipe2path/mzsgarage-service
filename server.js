@@ -216,6 +216,39 @@ server.get('/image', function(req, res){
 	});
 })
 
+server.post('/machinestatus', function(req, res){
+	var machineStatus = req.params.status;
+    var connection = getConnection();
+    connection.connect();
+
+    var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
+        ((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
+
+    res.setHeader('Access-Control-Allow-Origin','*');
+
+    var sql_query = "insert machineStatus (dateTimeStamp, status) values ('" + dateLocal + "'," + machineStatus + ")" ;
+    connection.query(sql_query, function(err, rows, fields) {
+        if (err) throw err;
+        res.send('imageStatus saved');
+    });
+})
+
+server.get('/machinestatus', function(req, res){
+    var connection = getConnection();
+    connection.connect();
+
+    res.setHeader('Access-Control-Allow-Origin','*');
+
+    var sql_query = "select * from machineStatus ms " +
+        "where datetimestamp = (select max(datetimestamp) " +
+        "from machineStatus ms2)" ;
+    connection.query(sql_query, function(err, rows, fields) {
+        if (err) throw err;
+        res.send(rows);
+    });
+
+})
+
 function getConnection(){
 	var connection = mysql.createConnection({
 		host     : 'mzsgarage.db.2259289.hostedresource.com',
