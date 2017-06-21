@@ -230,7 +230,7 @@ server.post('/machinestatus', function(req, res){
     var sql_query = "insert machineStatus (dateTimeStamp, floor, status) values ('" + dateLocal + "'," + floor + ", " + machineStatus + ")" ;
     connection.query(sql_query, function(err, rows, fields) {
         if (err) throw err;
-        res.send('imageStatus saved');
+        res.send('machine status saved');
     });
 })
 
