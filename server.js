@@ -245,7 +245,7 @@ server.get('/machinestatus', function(req, res){
 
     var sql_query = "SELECT n.* from mzsgarage.machineStatus n inner join (" +
    					" SELECT floor, status, MAX(datetimestamp) AS datetimestamp" +
-					" FROM mzsgarage.machineStatus GROUP BY floor) AS max USING (floor, datetimestamp)";
+					" FROM mzsgarage.machineStatus GROUP BY floor) AS max USING (floor, datetimestamp) ORDER BY n.floor ";
 		connection.query(sql_query, function(err, rows, fields) {
         if (err) throw err;
         res.send(rows);
