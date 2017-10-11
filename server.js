@@ -55,6 +55,7 @@ server.post('/update', function(req, res, cb){
 	var statusData = {};
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
+	statusData.garageid = req.params.id;
 	statusData.datetimestamp = dateLocal;
 	statusData.status = req.params.status;
 
@@ -64,7 +65,7 @@ server.post('/update', function(req, res, cb){
 	var sinchKey;
 	var sinchSecret;
 	var openTime = 300;
-	var sql_query = "insert GarageStatus (dateTimeStamp, status) values ('" + statusData.datetimestamp + "', " + statusData.status + ")";
+	var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values ('" +statusData.garageid + "', '" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		if (statusData.status = 1){
@@ -79,7 +80,7 @@ server.post('/update', function(req, res, cb){
 					});
 					openTime = rows2[0].garageOpenTimeAlert;
 
-					monitorGarageOpen(rows.insertId.toString(), connection, sinchSms, openTime, function(data){
+					monitorGarageOpen(rows.insertId.toString(), connection, statusData.garageid, sinchSms, openTime, function(data){
 						msg = 'text message sent';
 					});
 				}
@@ -89,39 +90,50 @@ server.post('/update', function(req, res, cb){
 	});
 })
 
-function monitorGarageOpen(openId, connection, sinchSms, openTime){
+function monitorGarageOpen(openId, connection, garageId, sinchSms, openTime){
 	var openTooLong = false;
 
-	var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId ;
+	var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageid = " + garageId + " and garageStatusId = " + openId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		if (rows != null){
 			var starttime = rows[0].dateTimeStamp;
-			var sql_query2 = "select * from GarageStatus order by garageStatusId desc limit 1";
-			connection.query(sql_query2, function(err2, rows2, fields2) {
+			var sql_query2 = "select * from GarageStatus where garageId = " + garageId + " order by garageStatusId desc limit 1";
+            connection.query(sql_query2, function(err2, rows2, fields2) {
 				if (err2) throw err2;
 				if (rows2 != null){
 					var gStatus = rows2[0].status;
+                    var timeNow = new Date();
+                    var timeDiff = (timeNow - new Date(starttime))/1000;
+                    if (parseInt(timeDiff)>openTime) {
 					if (gStatus == 1){
-						var timeNow = new Date();
-						var timeDiff = (timeNow - new Date(starttime))/1000;
-						if (parseInt(timeDiff)>openTime) {
-							sinchSms.send('+19094524127', 'HEY ZOMON, THE MASTER! Garage open for ' + openTime/60 + ' minutes!').then(function (response) {
-								console.log(response);
-							}).fail(function (error) {
-								console.log(error);
-							});
-
-							sinchSms.send('+19093466494', 'HEY JUDE!!! Garage open for ' + openTime/60 + ' minutes!').then(function (response) {
-								console.log(response);
-							}).fail(function (error) {
-								console.log(error);
-							});
-						}
-						else{
+						// get message configurations
+						var sql_query_msg = "select * from garage where garageId = " + garageId;
+							connection.query(sql_query_msg, function(err, rows3, fields3){
+								for(var i3 = 0; i3 < rows3.count(); i3++){
+                                    sinchSms.send(rows3[i3].phoneNumber, rows3[i3].smsMessage + openTime/60 + ' minutes!').then(function (response) {
+                                        console.log(response);
+                                    }).fail(function (error) {
+                                        console.log(error);
+                                    });
+								}
+							})
+							// sinchSms.send('+19094524127', 'HEY ZOMON, THE MASTER! Garage open for ' + openTime/60 + ' minutes!').then(function (response) {
+							// 	console.log(response);
+							// }).fail(function (error) {
+							// 	console.log(error);
+							// });
+                            //
+							// sinchSms.send('+19093466494', 'HEY JUDE!!! Garage open for ' + openTime/60 + ' minutes!').then(function (response) {
+							// 	console.log(response);
+							// }).fail(function (error) {
+							// 	console.log(error);
+							// });
+					}
+					else{
 							monitorGarageOpen(openId, connection, sinchSms, openTime);
 						}
-					}
+                    }
 					else{
 						return;
 					}
@@ -137,7 +149,8 @@ server.post('/image', function(req, res, cb){
 
 	// get image data and manipulate it to remove 0D and 0A bytes
 	var imageCaptureId = req.params.id;
-    var data = req.body;
+    var garageid = req.params.garageid;
+	var data = req.body;
 	var data2 = data.slice(1);
 	var data3 = data2.slice(1);
 
@@ -150,11 +163,11 @@ server.post('/image', function(req, res, cb){
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
 	var dateForFile = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
-	var filename = path.join("img-" + dateForFile + ".jpg");
+	var filename = path.join("img-" + garageid + "-" + dateForFile + ".jpg");
 
 	var connection = getConnection();
 	connection.connect();
-	var sql_query = "update imageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "' where imageCaptureId = " + imageCaptureId;
+	var sql_query = "update imageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + " where imageCaptureId = " + imageCaptureId;
 	connection.query(sql_query);
 
 	var params = {Key: filename, ContentType: 'image/jpeg', Body: data3};
@@ -185,6 +198,8 @@ server.post('/imageStatus', function(req, res, cb) {
 })
 
 server.post('/needimage', function(req, res, cb) {
+
+	var garageid = req.params.garageid;
 	var connection = getConnection();
 	connection.connect();
 
@@ -193,8 +208,7 @@ server.post('/needimage', function(req, res, cb) {
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var new_id = "";
-	var sql_query = "insert imageCapture (captureRequested) values ('" + dateLocal + "')";
+	var sql_query = "insert imageCapture (garageid, captureRequested) values (" + garageid + ", '" + dateLocal + "')";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		res.send(rows.insertId.toString());
