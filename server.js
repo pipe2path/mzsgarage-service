@@ -167,7 +167,7 @@ server.post('/image', function(req, res, cb){
 
 	var connection = getConnection();
 	connection.connect();
-	var sql_query = "update imageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + " where imageCaptureId = " + imageCaptureId;
+	var sql_query = "update imageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "' where imageCaptureId = " + imageCaptureId;
 	connection.query(sql_query);
 
 	var params = {Key: filename, ContentType: 'image/jpeg', Body: data3};
@@ -208,7 +208,7 @@ server.post('/needimage', function(req, res, cb) {
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var sql_query = "insert imageCapture (garageid, captureRequested) values (" + garageid + ", '" + dateLocal + "')";
+	var sql_query = "insert imageCapture (garageId, captureRequested) values (" + garageid + ", '" + dateLocal + "')";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		res.send(rows.insertId.toString());
