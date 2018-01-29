@@ -32,6 +32,7 @@ server.get('/status/', function (req, res, cb) {
 	});
 });
 
+/*
 server.get('/imageStatus', function(req, res){
 	var connection = getConnection();
 	connection.connect();
@@ -46,6 +47,7 @@ server.get('/imageStatus', function(req, res){
 		res.send(rows[0]);
 	});
 })
+*/
 
 // update garage status
 server.post('/update', function(req, res, cb){
