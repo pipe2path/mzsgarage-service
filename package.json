@@ -9,6 +9,7 @@
   "author": "Kevin Menezes",
   "license": "ISC",
   "dependencies": {
+    "restify": "^6.3.4",
     "sinch-sms": "0.0.8"
   }
 }
