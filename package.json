@@ -9,6 +9,10 @@
   "author": "Kevin Menezes",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.188.0",
+    "fs": "0.0.1-security",
+    "mysql": "^2.15.0",
+    "path": "^0.12.7",
     "restify": "^6.3.4",
     "sinch-sms": "0.0.8"
   }
