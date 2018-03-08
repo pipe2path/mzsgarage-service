@@ -25,7 +25,7 @@ server.get('/status/', function (req, res, cb) {
 	res.setHeader('Access-Control-Allow-Origin','*');
 
 	var sql_query = "select * from GarageStatus gs " +
-		"where garageid = " + garageid + " and datetimestamp = (select max(datetimestamp) " +
+		"where garageId = " + garageid + " and datetimestamp = (select max(datetimestamp) " +
 		"from GarageStatus gs2)" ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;

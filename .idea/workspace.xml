@@ -29,8 +29,8 @@
       <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="431">
-              <caret line="226" column="77" lean-forward="true" selection-start-line="226" selection-start-column="77" selection-end-line="226" selection-end-column="77" />
+            <state relative-caret-position="238">
+              <caret line="26" column="22" lean-forward="false" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -237,7 +237,7 @@
       <workItem from="1517211382904" duration="2059000" />
       <workItem from="1520483158889" duration="1987000" />
       <workItem from="1520485333316" duration="1771000" />
-      <workItem from="1520488881497" duration="4420000" />
+      <workItem from="1520488881497" duration="4620000" />
     </task>
     <task id="LOCAL-00001" summary="updated monitor function to send text msg via sinch. &#10;Changed timer to 10 minutes">
       <created>1479278294782</created>
@@ -257,7 +257,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="76705000" />
+    <option name="totallyTimeSpent" value="76905000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -751,8 +751,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="226" column="77" lean-forward="true" selection-start-line="226" selection-start-column="77" selection-end-line="226" selection-end-column="77" />
+        <state relative-caret-position="238">
+          <caret line="26" column="22" lean-forward="false" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
           <folding />
         </state>
       </provider>
