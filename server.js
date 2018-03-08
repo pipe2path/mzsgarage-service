@@ -175,9 +175,9 @@ server.post('/image', function(req, res, cb){
 	var params = {Key: filename, ContentType: 'image/jpeg', Body: data3};
 	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data3}});
 	s3bucket.upload(params, function(err2, data){
-	 	if (err) {
+	 	if (err2) {
 	 		console.log("S3 bucket upload error...");
-	 		throw err
+	 		throw err2
 	 	}
 		//res.send('image saved');
 	});
