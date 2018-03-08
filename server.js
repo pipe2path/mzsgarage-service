@@ -195,7 +195,7 @@ server.post('/imageStatus', function(req, res, cb) {
 	var sql_query = "update ImageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) {
-			console.log("Error updateing imageCapture table with captureCompleted date");
+			console.log("Error updating imageCapture table with captureCompleted date");
 			throw err;
 		}
 		res.send('imageStatus saved');
