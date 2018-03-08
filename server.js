@@ -95,7 +95,7 @@ server.post('/update', function(req, res, cb){
 function monitorGarageOpen(openId, connection, garageId, sinchSms, openTime){
 	var openTooLong = false;
 
-	var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageid = " + garageId + " and garageStatusId = " + openId ;
+	var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageId = " + garageId + " and garageStatusId = " + openId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		if (rows != null){
