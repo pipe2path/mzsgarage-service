@@ -285,6 +285,6 @@ function getConnection(){
 	return connection;
 }
 
-server.listen(process.env.PORT || 4028, function () { // bind server to port 4028.
+server.listen(process.env.PORT || 3028, function () { // bind server to port 4028.
 	console.log('%s listening at %s', server.name, server.url);
 });
