@@ -178,8 +178,7 @@ server.post('/image', function(req, res, cb){
 	 	if (err) {
 	 		console.log("S3 bucket upload error...");
 	 		throw err
-	 	};
-        }
+	 	}
 		//res.send('image saved');
 	});
 
