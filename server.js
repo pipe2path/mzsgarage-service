@@ -11,20 +11,21 @@ var sinchSms = require('sinch-sms');
 // create an HTTP server.
 var server = restify.createServer();
 
-server.use(restify.queryParser());
-server.use(restify.bodyParser());
-server.use(restify.CORS());
+server.use(restify.plugins.queryParser());
+server.use(restify.plugins.bodyParser());
+//server.use(restify.CORS());
 
 // get garage status
 server.get('/status/', function (req, res, cb) {
 
 	var connection = getConnection();
 	connection.connect();
+	var garageid = req.query.id;
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
 	var sql_query = "select * from GarageStatus gs " +
-		"where datetimestamp = (select max(datetimestamp) " +
+		"where garageid = " + garageid + " and datetimestamp = (select max(datetimestamp) " +
 		"from GarageStatus gs2)" ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
@@ -56,9 +57,9 @@ server.post('/update', function(req, res, cb){
 	var statusData = {};
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
-	statusData.garageid = req.params.id;
+	statusData.garageid = req.query.id;
 	statusData.datetimestamp = dateLocal;
-	statusData.status = req.params.status;
+	statusData.status = req.query.status;
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
@@ -149,8 +150,8 @@ function monitorGarageOpen(openId, connection, garageId, sinchSms, openTime){
 server.post('/image', function(req, res, cb){
 
 	// get image data and manipulate it to remove 0D and 0A bytes
-	var imageCaptureId = req.params.id;
-    var garageid = req.params.garageid;
+	var imageCaptureId = req.query.id;
+    var garageid = req.query.garageid;
 	var data = req.body;
 	var data2 = data.slice(1);
 	var data3 = data2.slice(1);
@@ -185,7 +186,7 @@ server.post('/imageStatus', function(req, res, cb) {
 	var connection = getConnection();
 	connection.connect();
 
-	var imageCaptureId = req.params.id;
+	var imageCaptureId = req.query.id;
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
 
@@ -200,7 +201,7 @@ server.post('/imageStatus', function(req, res, cb) {
 
 server.post('/needimage', function(req, res, cb) {
 
-	var garageid = req.params.garageid;
+	var garageid = req.query.garageid;
 	var connection = getConnection();
 	connection.connect();
 
@@ -220,7 +221,7 @@ server.get('/image', function(req, res){
 	var connection = getConnection();
 	connection.connect();
 
-	var imageCaptureId = req.params.id;
+	var imageCaptureId = req.query.id;
 	res.setHeader('Access-Control-Allow-Origin','*');
 
 	var sql_query = "select captureCompleted, imagePath from imageCapture where " +
@@ -270,14 +271,14 @@ server.get('/machinestatus', function(req, res){
 
 function getConnection(){
 	var connection = mysql.createConnection({
-		host     : 'mzsgarage.db.2259289.hostedresource.com',
-		user     : 'mzsgarage',
-		password : 'KeeJudKev1!',
+		host     : '50.62.209.52',
+		user     : 'mzs-admin',
+		password : 'Bombay79',
 		database : 'mzsgarage'
 	});
 	return connection;
 }
 
-server.listen(process.env.PORT || 3028, function () { // bind server to port 5000.
+server.listen(process.env.PORT || 4028, function () { // bind server to port 4028.
 	console.log('%s listening at %s', server.name, server.url);
 });
