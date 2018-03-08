@@ -40,7 +40,7 @@ server.get('/imageStatus', function(req, res){
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var sql_query = "select imageCaptureId, captureRequested, captureCompleted from imageCapture where " +
+	var sql_query = "select imageCaptureId, captureRequested, captureCompleted from ImageCapture where " +
 			"captureRequested != '' and captureCompleted is null";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
@@ -169,7 +169,7 @@ server.post('/image', function(req, res, cb){
 
 	var connection = getConnection();
 	connection.connect();
-	var sql_query = "update imageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "' where imageCaptureId = " + imageCaptureId;
+	var sql_query = "update ImageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "' where imageCaptureId = " + imageCaptureId;
 	connection.query(sql_query);
 
 	var params = {Key: filename, ContentType: 'image/jpeg', Body: data3};
@@ -192,7 +192,7 @@ server.post('/imageStatus', function(req, res, cb) {
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var sql_query = "update imageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
+	var sql_query = "update ImageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		res.send('imageStatus saved');
@@ -210,7 +210,7 @@ server.post('/needimage', function(req, res, cb) {
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var sql_query = "insert imageCapture (garageId, captureRequested) values (" + garageid + ", '" + dateLocal + "')";
+	var sql_query = "insert ImageCapture (garageId, captureRequested) values (" + garageid + ", '" + dateLocal + "')";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
 		res.send(rows.insertId.toString());
@@ -224,7 +224,7 @@ server.get('/image', function(req, res){
 	var imageCaptureId = req.query.id;
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var sql_query = "select captureCompleted, imagePath from imageCapture where " +
+	var sql_query = "select captureCompleted, imagePath from ImageCapture where " +
 		"imageCaptureId = " + imageCaptureId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
