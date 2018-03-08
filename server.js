@@ -25,7 +25,7 @@ server.get('/status/', function (req, res, cb) {
 	res.setHeader('Access-Control-Allow-Origin','*');
 
 	var sql_query = "select * from GarageStatus gs " +
-		"where garageId = " + garageid + " and datetimestamp = (select max(datetimestamp) " +
+		"where garageId = " + garageid + " and dateTimeStamp = (select max(dateTimeStamp) " +
 		"from GarageStatus gs2)" ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) throw err;
@@ -260,8 +260,8 @@ server.get('/machinestatus', function(req, res){
     //				 "order by floor, dateTimeStamp desc " ;
 
     var sql_query = "SELECT n.* from mzsgarage.machineStatus n inner join (" +
-   					" SELECT floor, status, MAX(datetimestamp) AS datetimestamp" +
-					" FROM mzsgarage.machineStatus GROUP BY floor) AS max USING (floor, datetimestamp) ORDER BY n.floor ";
+   					" SELECT floor, status, MAX(dateTimeStamp) AS dateTimeStamp" +
+					" FROM mzsgarage.machineStatus GROUP BY floor) AS max USING (floor, dateTimeStamp) ORDER BY n.floor ";
 		connection.query(sql_query, function(err, rows, fields) {
         if (err) throw err;
         res.send(rows);
