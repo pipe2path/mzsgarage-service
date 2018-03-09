@@ -195,10 +195,11 @@ server.post('/imageStatus', function(req, res, cb) {
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var sql_query = "update ImageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
+	//var sql_query = "update ImageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
+    var sql_query = "update ImageCapture set captureCompleted = '2018-03-08 22:13:11' where imageCaptureId = " + imageCaptureId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) {
-			console.log("Error updating imageCapture table with captureCompleted date");
+			console.log("Error updating imageCapture table with captureCompleted date. imageCaptureId = " + imageCaptureId);
 			throw err;
 		}
 		res.send('imageStatus saved');
@@ -207,10 +208,10 @@ server.post('/imageStatus', function(req, res, cb) {
 
 server.post('/needimage', function(req, res, cb) {
 
-	var garageid = req.query.garageid;
 	var connection = getConnection();
 	connection.connect();
 
+    var garageid = req.query.garageid;
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
 
