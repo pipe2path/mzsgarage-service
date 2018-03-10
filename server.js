@@ -33,22 +33,6 @@ server.get('/status/', function (req, res, cb) {
 	});
 });
 
-
-server.get('/imageStatus', function(req, res){
-	var connection = getConnection();
-	connection.connect();
-
-	res.setHeader('Access-Control-Allow-Origin','*');
-
-	var sql_query = "select imageCaptureId, captureRequested, captureCompleted from ImageCapture where " +
-			"captureRequested != '' and captureCompleted is null";
-	connection.query(sql_query, function(err, rows, fields) {
-		if (err) throw err;
-		//json = JSON.stringify(rows[0]);
-		res.send(rows[0]);
-	});
-})
-
 // update garage status
 server.post('/update', function(req, res, cb){
 	var connection = getConnection();
@@ -161,28 +145,49 @@ server.post('/image', function(req, res, cb){
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
+    var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
 	var dateForFile = dateLocal.replace(/:/g, '').replace(/ /g, '').replace(/-/g, '');
 
 	var filename = path.join("img-" + garageid + "-" + dateForFile + ".jpg");
 
+    var params = {Key: filename, ContentType: 'image/jpeg', Body: data3};
+    var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data3}});
+    s3bucket.upload(params, function(err2, data){
+        if (err2) {
+            console.log("S3 bucket upload error...");
+            throw err2
+        }
+        //res.send('image saved');
+    });
+
 	var connection = getConnection();
 	connection.connect();
-	var sql_query = "update ImageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "' where imageCaptureId = " + imageCaptureId;
+	//var sql_query = "update ImageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "', captureCompleted = '" + dateForFile +"' +
+	//				" where imageCaptureId = " + imageCaptureId;
+
+    var sql_query = "update ImageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "', captureCompleted = '" + dateLocal +
+    "' where imageCaptureId = " + imageCaptureId;
 	connection.query(sql_query);
 
-	var params = {Key: filename, ContentType: 'image/jpeg', Body: data3};
-	var s3bucket = new aws.S3({params:{Bucket:'mzsgarage-images', Key: filename, ContentType: 'image/jpeg', Body: data3}});
-	s3bucket.upload(params, function(err2, data){
-	 	if (err2) {
-	 		console.log("S3 bucket upload error...");
-	 		throw err2
-	 	}
-		//res.send('image saved');
-	});
+
 
 	res.send('image saved');
+})
+
+server.get('/imageStatus', function(req, res){
+    var connection = getConnection();
+    connection.connect();
+
+    res.setHeader('Access-Control-Allow-Origin','*');
+
+    var sql_query = "select imageCaptureId, captureRequested, captureCompleted from ImageCapture where " +
+        "captureRequested != '' and captureCompleted is null";
+    connection.query(sql_query, function(err, rows, fields) {
+        if (err) throw err;
+        //json = JSON.stringify(rows[0]);
+        res.send(rows[0]);
+    });
 })
 
 server.post('/imageStatus', function(req, res, cb) {
@@ -195,8 +200,8 @@ server.post('/imageStatus', function(req, res, cb) {
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
-	//var sql_query = "update ImageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
-    var sql_query = "update ImageCapture set captureCompleted = '2018-03-08 22:13:11' where imageCaptureId = " + imageCaptureId ;
+	var sql_query = "update ImageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
+    //var sql_query = "update ImageCapture set captureCompleted = '2018-03-08 22:13:11' where imageCaptureId = " + imageCaptureId ;
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) {
 			console.log("Error updating imageCapture table with captureCompleted date. imageCaptureId = " + imageCaptureId);
