@@ -184,7 +184,10 @@ server.get('/imageStatus', function(req, res){
     var sql_query = "select imageCaptureId, captureRequested, captureCompleted from ImageCapture where " +
         "captureRequested != '' and captureCompleted is null";
     connection.query(sql_query, function(err, rows, fields) {
-        if (err) throw err;
+        if (err) {
+        	console.log("Error getting image capture status" + err);
+        	throw err;
+        }
         //json = JSON.stringify(rows[0]);
         res.send(rows[0]);
     });
