@@ -13,7 +13,6 @@ var server = restify.createServer();
 
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
-//server.use(restify.CORS());
 
 var db_config = {
     host: '50.62.209.52',
@@ -30,8 +29,6 @@ handleDisconnect();
 // get garage status
 server.get('/status/', function (req, res, cb) {
 
-	//var connection = getConnection();
-	//connection.connect();
 	var garageid = req.query.id;
 
 	res.setHeader('Access-Control-Allow-Origin','*');
@@ -47,8 +44,6 @@ server.get('/status/', function (req, res, cb) {
 
 // update garage status
 server.post('/update', function(req, res, cb){
-	//var connection = getConnection();
-	//connection.connect();
 
 	var statusData = {};
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
@@ -173,26 +168,17 @@ server.post('/image', function(req, res, cb){
         //res.send('image saved');
     });
 
-	//var connection = getConnection();
-	//connection.connect();
-
     var sql_query = "update ImageCapture set imagePath = 'https://s3-us-west-1.amazonaws.com/mzsgarage-images/" + filename + "', captureCompleted = '" + dateLocal +
     "' where imageCaptureId = " + imageCaptureId;
 	connection.query(sql_query);
-
-
 
 	res.send('image saved');
 })
 
 server.get('/imageStatus', function(req, res){
-    //var connection = getConnection();
-    //connection.connect();
 
     res.setHeader('Access-Control-Allow-Origin','*');
 
-    //var sql_query = "select imageCaptureId, captureRequested, captureCompleted from ImageCapture where " +
-    //    "captureRequested != '' and captureCompleted is null";
     var sql_query = "select imageCaptureId, captureRequested, captureCompleted from ImageCapture where " +
         "captureRequested is not null and captureCompleted is null";
     connection.query(sql_query, function(err, rows, fields) {
@@ -200,14 +186,11 @@ server.get('/imageStatus', function(req, res){
         	console.log("Error getting image capture status" + err);
         	throw err;
         }
-        //json = JSON.stringify(rows[0]);
         res.send(rows[0]);
     });
 })
 
 server.post('/imageStatus', function(req, res, cb) {
-	//var connection = getConnection();
-	//connection.connect();
 
 	var imageCaptureId = req.query.id;
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
@@ -228,9 +211,6 @@ server.post('/imageStatus', function(req, res, cb) {
 
 server.post('/needimage', function(req, res, cb) {
 
-	//var connection = getConnection();
-	//connection.connect();
-
     var garageid = req.query.garageid;
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
@@ -245,8 +225,6 @@ server.post('/needimage', function(req, res, cb) {
 })
 
 server.get('/image', function(req, res){
-	//var connection = getConnection();
-	//connection.connect();
 
 	var imageCaptureId = req.query.id;
 	res.setHeader('Access-Control-Allow-Origin','*');
@@ -262,8 +240,6 @@ server.get('/image', function(req, res){
 server.post('/machinestatus', function(req, res){
 	var machineStatus = req.params.status;
 	var floor = req.params.floor;
-    //var connection = getConnection();
-    //connection.connect();
 
     var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
         ((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
@@ -278,13 +254,8 @@ server.post('/machinestatus', function(req, res){
 })
 
 server.get('/machinestatus', function(req, res){
-    //var connection = getConnection();
-    //connection.connect();
 
     res.setHeader('Access-Control-Allow-Origin','*');
-
-    //var sql_query = "SELECT floor, status, max(datetimestamp) as datetimestamp FROM mzsgarage.machineStatus group by floor " +
-    //				 "order by floor, dateTimeStamp desc " ;
 
     var sql_query = "SELECT n.* from mzsgarage.machineStatus n inner join (" +
    					" SELECT floor, status, MAX(dateTimeStamp) AS dateTimeStamp" +
@@ -296,16 +267,6 @@ server.get('/machinestatus', function(req, res){
 
 })
 
-/*function getConnection(){
-	var connection = mysql.createConnection({
-		host     : '50.62.209.52',
-		user     : 'mzs-admin',
-		password : 'Bombay79',
-		database : 'mzsgarage'
-	});
-	return connection;
-}*/
-
 function handleDisconnect() {
     connection = mysql.createConnection(db_config); // Recreate the connection, since
                                                     // the old one cannot be reused.
@@ -313,10 +274,10 @@ function handleDisconnect() {
     connection.connect(function(err) {              // The server is either down
         if(err) {                                     // or restarting (takes a while sometimes).
             console.log('error when connecting to db:', err);
-            setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-        }                                     // to avoid a hot loop, and to allow our node script to
-    });                                     // process asynchronous requests in the meantime.
-                                            // If you're also serving http, display a 503 error.
+            setTimeout(handleDisconnect, 2000); 		// We introduce a delay before attempting to reconnect,
+        }                                     			// to avoid a hot loop, and to allow our node script to
+    });                                     			// process asynchronous requests in the meantime.
+                                            			// If you're also serving http, display a 503 error.
     connection.on('error', function(err) {
         console.log('db error', err);
         if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
