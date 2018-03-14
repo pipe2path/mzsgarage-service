@@ -51,6 +51,9 @@ server.post('/update', function(req, res, cb){
 	statusData.garageid = req.query.id;
 	statusData.datetimestamp = dateLocal;
 	statusData.status = req.query.statusid;
+
+	var status = req.query.statusid;
+
     //statusData.status = 1;
 
 	res.setHeader('Access-Control-Allow-Origin','*');
@@ -61,10 +64,10 @@ server.post('/update', function(req, res, cb){
 	var openTime = 300;
     //var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
 
-    var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
+    var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) {
-			console.log("Parameters = " + req.query.id + " and " + req.query.statusid)
+			console.log("Parameter for status = " + status)
 			throw err;
 		}
 		if (statusData.status = 1){
