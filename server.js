@@ -83,7 +83,7 @@ server.post('/update', function(req, res, cb){
 					});
 					openTime = rows2[0].garageOpenTimeAlert;
 
-					monitorGarageOpen(rows.insertId.toString(), connection, statusData.garageid, sinchSms, openTime, function(data){
+					monitorGarageOpen(rows.insertId.toString(), connection, garageid, sinchSms, openTime, function(data){
 						msg = 'text message sent';
 					});
 				}
