@@ -43,7 +43,7 @@ server.get('/status/', function (req, res, cb) {
 });
 
 // update garage status
-server.post('/update/:id/:statusid', function(req, res, cb){
+server.post('/update', function(req, res, cb){
 
 	var statusData = {};
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
