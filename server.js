@@ -52,7 +52,7 @@ server.post('/update', function(req, res, cb){
 	statusData.datetimestamp = dateLocal;
 	statusData.status = req.params.statusid;
 
-	var garageid = req.query.garageid;
+	var garageid = req.query.id;
 	var status = req.query.statusid;
 
     //statusData.status = 1;
