@@ -58,10 +58,12 @@ server.post('/update', function(req, res, cb){
 	var sinchKey;
 	var sinchSecret;
 	var openTime = 300;
-	var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" +statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
+    //var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
+
+    var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) {
-			console.log("insert GarageStatus error... " + sql_query )
+			console.log("insert GarageStatus error... " + req.query.status )
 			throw err;
 		}
 		if (statusData.status = 1){
