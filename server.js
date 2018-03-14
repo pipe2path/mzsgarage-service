@@ -64,7 +64,7 @@ server.post('/update', function(req, res, cb){
     var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) {
-			console.log("insert GarageStatus error... " + req.query)
+			console.log("Parameters = " + req.query.id + " and " + req.query.statusid)
 			throw err;
 		}
 		if (statusData.status = 1){
