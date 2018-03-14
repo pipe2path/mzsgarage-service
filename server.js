@@ -43,7 +43,7 @@ server.get('/status/', function (req, res, cb) {
 });
 
 // update garage status
-server.post('/update', function(req, res, cb){
+server.post('/update/:id/:statusid', function(req, res, cb){
 
 	var statusData = {};
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
@@ -65,10 +65,10 @@ server.post('/update', function(req, res, cb){
 	var openTime = 300;
     //var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
 
-    var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + garageid + ", '" + statusData.datetimestamp + "', " + status + ")";
+    var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) {
-			console.log("Parameter for id = " + garageid + " and status = " + status)
+			console.log("Parameter for id = " + statusData.garageid + " and status = " + statusData.status)
 			throw err;
 		}
 		if (statusData.status = 1){
@@ -83,7 +83,7 @@ server.post('/update', function(req, res, cb){
 					});
 					openTime = rows2[0].garageOpenTimeAlert;
 
-					monitorGarageOpen(rows.insertId.toString(), connection, garageid, sinchSms, openTime, function(data){
+					monitorGarageOpen(rows.insertId.toString(), connection, statusData.garageid, sinchSms, openTime, function(data){
 						msg = 'text message sent';
 					});
 				}
