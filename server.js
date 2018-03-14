@@ -48,9 +48,9 @@ server.post('/update', function(req, res, cb){
 	var statusData = {};
 	var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
-	statusData.garageid = req.query.id;
+	statusData.garageid = req.params.id;
 	statusData.datetimestamp = dateLocal;
-	statusData.status = req.query.statusid;
+	statusData.status = req.params.statusid;
 
 	var status = req.query.statusid;
 
