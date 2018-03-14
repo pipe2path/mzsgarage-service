@@ -60,7 +60,10 @@ server.post('/update', function(req, res, cb){
 	var openTime = 300;
 	var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" +statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
-		if (err) throw err;
+		if (err) {
+			console.log("insert GarageStatus error... " + sql_query )
+			throw err;
+		}
 		if (statusData.status = 1){
 			sql_query='select * from configSettings limit 1';
 			connection.query(sql_query, function(err, rows2, fields) {
