@@ -50,7 +50,8 @@ server.post('/update', function(req, res, cb){
 		((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
 	statusData.garageid = req.query.id;
 	statusData.datetimestamp = dateLocal;
-	statusData.status = req.query.status;
+	statusData.status = req.query.statusid;
+    //statusData.status = 1;
 
 	res.setHeader('Access-Control-Allow-Origin','*');
 
@@ -63,7 +64,7 @@ server.post('/update', function(req, res, cb){
     var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
 	connection.query(sql_query, function(err, rows, fields) {
 		if (err) {
-			console.log("insert GarageStatus error... " + req.query.status )
+			console.log("insert GarageStatus error... " + req.query.statusid )
 			throw err;
 		}
 		if (statusData.status = 1){
