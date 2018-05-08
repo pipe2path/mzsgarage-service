@@ -115,9 +115,9 @@ function monitorGarageOpen(openId, connection, garageId, sinchSms, openTime){
                     if (parseInt(timeDiff)>openTime) {
                         if (gStatus == 1){
                             // get message configurations
-                            var sql_query_msg = "select * from garage where garageId = " + garageId;
+                            var sql_query_msg = "select * from Garage where garageId = " + garageId;
                             connection.query(sql_query_msg, function(err, rows3, fields3){
-                                for(var i3 = 0; i3 < rows3.count(); i3++){
+                                for(var i3 = 0; i3 < rows3.length; i3++){
                                     sinchSms.send(rows3[i3].phoneNumber, rows3[i3].smsMessage + openTime/60 + ' minutes!').then(function (response) {
                                         console.log(response);
                                     }).fail(function (error) {
