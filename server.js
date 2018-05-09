@@ -131,7 +131,7 @@ function monitorGarageOpen(openId, gId, connection, sinchSms, openTime){
                             })
                         }
                         else{
-                            monitorGarageOpen(openId, connection, sinchSms, openTime);
+                            monitorGarageOpen(openId, gId, connection, sinchSms, openTime);
                         }
                     }
                     else{
