@@ -102,7 +102,9 @@ function monitorGarageOpen(openId, connection, garageId, sinchSms, openTime){
 
     var sql_query = "select garageStatusId, `dateTimeStamp`, `status` from GarageStatus where garageStatusId = " + openId + " and garageId = " + garageId ;
     connection.query(sql_query, function(err, rows, fields) {
-        if (err) throw err;
+        if (err) {
+            console.log(sql_query + " Error: " + err);
+        }
         if (rows != null){
             var starttime = rows[0].dateTimeStamp;
             var sql_query2 = "select * from GarageStatus where garageId = " + garageId + " order by garageStatusId desc limit 1";
