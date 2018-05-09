@@ -65,6 +65,7 @@ server.post('/update', function(req, res, cb){
     statusData.garageid = req.query.id;
     statusData.datetimestamp = dateLocal;
     statusData.status = req.query.status;
+    var gId = statusData.garageid;
 
     res.setHeader('Access-Control-Allow-Origin','*');
 
@@ -87,7 +88,7 @@ server.post('/update', function(req, res, cb){
                     });
                     openTime = rows2[0].garageOpenTimeAlert;
 
-                    monitorGarageOpen(rows.insertId.toString(), connection, statusData.garageid, sinchSms, openTime, function(data){
+                    monitorGarageOpen(rows.insertId.toString(), connection, gId, sinchSms, openTime, function(data){
                         msg = 'text message sent';
                     });
                 }
