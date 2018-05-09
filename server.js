@@ -88,7 +88,7 @@ server.post('/update', function(req, res, cb){
                     });
                     openTime = rows2[0].garageOpenTimeAlert;
 
-                    monitorGarageOpen(rows.insertId.toString(), connection, gId, sinchSms, openTime, function(data){
+                    monitorGarageOpen(rows.insertId.toString(), gId, connection, sinchSms, openTime, function(data){
                         msg = 'text message sent';
                     });
                 }
@@ -98,18 +98,18 @@ server.post('/update', function(req, res, cb){
     });
 })
 
-function monitorGarageOpen(openId, connection, garageId, sinchSms, openTime){
+function monitorGarageOpen(openId, gId, connection, sinchSms, openTime){
     var openTooLong = false;
 
-    var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId + " and garageId = " + garageId ;
+    var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId + " and garageId = " + gId ;
     connection.query(sql_query, function(err, rows, fields) {
         if (err) {
-            console.log('OpenId: ' + openId + ' garageId: ' + garageId);
+            console.log('OpenId: ' + openId + ' garageId: ' + gId);
             console.log(sql_query + " Error: " + err);
         }
         if (rows != null){
             var starttime = rows[0].dateTimeStamp;
-            var sql_query2 = "select * from GarageStatus where garageId = " + garageId + " order by garageStatusId desc limit 1";
+            var sql_query2 = "select * from GarageStatus where garageId = " + gId + " order by garageStatusId desc limit 1";
             connection.query(sql_query2, function(err2, rows2, fields2) {
                 if (err2) throw err2;
                 if (rows2 != null){
@@ -119,7 +119,7 @@ function monitorGarageOpen(openId, connection, garageId, sinchSms, openTime){
                     if (gStatus == 1){
                         if (parseInt(timeDiff)>openTime) {
                             // get message configurations
-                            var sql_query_msg = "select * from Garage where garageId = " + garageId;
+                            var sql_query_msg = "select * from Garage where garageId = " + gId;
                             connection.query(sql_query_msg, function(err, rows3, fields3){
                                 for(var i3 = 0; i3 < rows3.length; i3++){
                                     sinchSms.send(rows3[i3].phoneNumber, rows3[i3].smsMessage + openTime/60 + ' minutes!').then(function (response) {
