@@ -114,15 +114,16 @@ function monitorGarageOpen(openId, gId, connection, sinchSms, openTime){
                 if (err2) throw err2;
                 if (rows2 != null){
                     var gStatus = rows2[0].status;
-                    var timeNow = new Date();
-                    var timeDiff = (timeNow - new Date(starttime))/1000;
+                    //var timeNow = new Date();
+                    //var timeDiff = (timeNow - new Date(starttime))/1000;
+                    var diffInMins = MinutesElapsed(starttime);
                     if (gStatus == 1){
-                        if (parseInt(timeDiff)>openTime) {
+                        if (parseInt(diffInMins)>openTime) {
                             // get message configurations
                             var sql_query_msg = "select * from Garage where garageId = " + gId;
                             connection.query(sql_query_msg, function(err, rows3, fields3){
                                 for(var i3 = 0; i3 < rows3.length; i3++){
-                                    sinchSms.send(rows3[i3].phoneNumber, rows3[i3].smsMessage + openTime/60 + ' minutes!').then(function (response) {
+                                    sinchSms.send(rows3[i3].phoneNumber, rows3[i3].smsMessage + openTime + ' minutes!').then(function (response) {
                                         console.log(response);
                                     }).fail(function (error) {
                                         console.log(error);
@@ -142,6 +143,15 @@ function monitorGarageOpen(openId, gId, connection, sinchSms, openTime){
         }
     });
     return openTooLong;
+}
+
+function MinutesElapsed(starttime){
+    var timeNow = new Date();
+    var diffMs = (timeNow - new Date(starttime)); // milliseconds between now & Christmas
+    //var diffDays = Math.floor(diffMs / 86400000); // days
+    //var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+    return diffMins;
 }
 
 // post captured image
