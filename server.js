@@ -22,7 +22,7 @@ server.use(restify.plugins.bodyParser());
 // };
 
 var db_config_rds = {
-    host: 'pipe2path.cnov3xgxiwbf.us-west-2.rds.amazonaws.com',
+    host: 'mzs-garage.cnov3xgxiwbf.us-west-2.rds.amazonaws.com',
     user: 'pipe2path',
     password : 'Bombay79',
     database : 'mzs_garage'
