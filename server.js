@@ -14,11 +14,18 @@ var server = restify.createServer();
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
-var db_config = {
-    host: '50.62.209.52',
-    user: 'mzs-admin',
+// var db_config = {
+//     host: '50.62.209.52',
+//     user: 'mzs-admin',
+//     password : 'Bombay79',
+//     database : 'mzsgarage'
+// };
+
+var db_config_rds = {
+    host: 'pipe2path.cnov3xgxiwbf.us-west-2.rds.amazonaws.com',
+    user: 'pipe2path',
     password : 'Bombay79',
-    database : 'mzsgarage'
+    database : 'mzs_garage'
 };
 
 var connection;
@@ -270,7 +277,7 @@ server.get('/machinestatus', function(req, res){
 })
 
 function handleDisconnect() {
-    connection = mysql.createConnection(db_config); // Recreate the connection, since
+    connection = mysql.createConnection(db_config_rds); // Recreate the connection, since
                                                     // the old one cannot be reused.
 
     connection.connect(function(err) {              // The server is either down
