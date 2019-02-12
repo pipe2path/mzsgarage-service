@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98e1e460-6eae-41f0-9d6a-45001975fd95" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <ignored path="mzsgarage-service.iws" />
@@ -28,8 +29,8 @@
       <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="25" column="22" lean-forward="true" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
+            <state relative-caret-position="253">
+              <caret line="127" column="52" lean-forward="true" selection-start-line="127" selection-start-column="52" selection-end-line="127" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -79,10 +80,11 @@
       <find>post(</find>
       <find>update</find>
       <find>imageCapture</find>
-      <find>monitorGarageOpen</find>
       <find>sinchSms</find>
       <find>db_config_rds</find>
       <find>db_config</find>
+      <find>imagePath</find>
+      <find>monitorGarageOpen</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -119,10 +121,10 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="-80" />
+    <option name="y" value="75" />
+    <option name="width" value="1918" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -247,7 +249,7 @@
       <workItem from="1532502602511" duration="1189000" />
       <workItem from="1534478449307" duration="329000" />
       <workItem from="1544566676135" duration="1118000" />
-      <workItem from="1549181386709" duration="7889000" />
+      <workItem from="1549181386709" duration="26044000" />
     </task>
     <task id="LOCAL-00001" summary="updated monitor function to send text msg via sinch. &#10;Changed timer to 10 minutes">
       <created>1479278294782</created>
@@ -267,7 +269,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="155641000" />
+    <option name="totallyTimeSpent" value="173796000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -336,15 +338,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/server.js</url>
-          <line>38</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="134" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="135" />
+      <option name="time" value="159" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -376,20 +370,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="22" lean-forward="true" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="101" selection-start-column="101" selection-end-column="101" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -401,6 +381,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2227">
           <caret line="131" column="71" selection-start-line="131" selection-start-column="67" selection-end-line="131" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="101" selection-start-column="101" selection-end-column="101" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="127" column="52" lean-forward="true" selection-start-line="127" selection-start-column="52" selection-end-line="127" selection-end-column="52" />
         </state>
       </provider>
     </entry>

@@ -125,7 +125,7 @@ function monitorGarageOpen(openId, gId, connection, sinchSms, openTime){
                     //var timeDiff = (timeNow - new Date(starttime))/1000;
                     var diffInMins = MinutesElapsed(starttime);
                     if (gStatus == 1){
-                        if (parseInt(diffInMins)>openTime) {
+                        if (parseInt(diffInMins) >= openTime) {
                             // get message configurations
                             var sql_query_msg = "select * from Garage where garageId = " + gId;
                             connection.query(sql_query_msg, function(err, rows3, fields3){
