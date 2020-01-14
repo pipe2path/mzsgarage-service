@@ -49,6 +49,20 @@ server.get('/status/', function (req, res, cb) {
     });
 });
 
+server.get('/openings/', function (req, res, cb) {
+
+    var garageid = req.query.id;
+
+    res.setHeader('Access-Control-Allow-Origin','*');
+
+    var sql_query = "select * from GarageStatus " +
+        "where garageid = " + garageid + " order by DateTimeStamp desc limit 0, 10" ;
+    connection.query(sql_query, function(err, rows, fields) {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
 
 server.get('/imageStatus', function(req, res){
 
@@ -77,9 +91,11 @@ server.post('/update', function(req, res, cb){
     res.setHeader('Access-Control-Allow-Origin','*');
 
     var msg = "status updated";
-    var sinchKey;
-    var sinchSecret;
-    var openTime = 300;
+    //var sinchKey;
+    //var sinchSecret;
+    var openTime = 5;
+    var smsAccountId = '';
+    var smsAccountToken = '';
     var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" +statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
     connection.query(sql_query, function(err, rows, fields) {
         if (err) throw err;
@@ -87,15 +103,17 @@ server.post('/update', function(req, res, cb){
             sql_query='select * from configSettings limit 1';
             connection.query(sql_query, function(err, rows2, fields) {
                 if (rows2!=null){
-                    sinchKey = rows2[0].sinchKey;
-                    sinchSecret = rows2[0].sinchPwd;
-                    sinchSms = require('sinch-sms')({
-                        key: sinchKey,
-                        secret:sinchSecret
-                    });
+                    //sinchKey = rows2[0].sinchKey;
+                    //sinchSecret = rows2[0].sinchPwd;
+                    // sinchSms = require('sinch-sms')({
+                    //     key: sinchKey,
+                    //     secret:sinchSecret
+                    // });
+                    smsAccountId = rows2[0].smsAccountId;
+                    smsAccountToken = rows2[0].smsAccountToken;
                     openTime = rows2[0].garageOpenTimeAlert;
 
-                    monitorGarageOpen(rows.insertId.toString(), gId, connection, sinchSms, openTime, function(data){
+                    monitorGarageOpen(rows.insertId.toString(), gId, connection, smsAccountId, smsAccountToken, openTime, function(data){
                         msg = 'text message sent';
                     });
                 }
@@ -105,8 +123,9 @@ server.post('/update', function(req, res, cb){
     });
 })
 
-function monitorGarageOpen(openId, gId, connection, sinchSms, openTime){
+function monitorGarageOpen(openId, gId, connection, smsAccountId, smsAccountToken, openTime){
     var openTooLong = false;
+    var client = require('twilio')(smsAccountId, smsAccountToken);
 
     var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId + " and garageId = " + gId ;
     connection.query(sql_query, function(err, rows, fields) {
@@ -130,16 +149,19 @@ function monitorGarageOpen(openId, gId, connection, sinchSms, openTime){
                             var sql_query_msg = "select * from Garage where garageId = " + gId;
                             connection.query(sql_query_msg, function(err, rows3, fields3){
                                 for(var i3 = 0; i3 < rows3.length; i3++){
-                                    sinchSms.send(rows3[i3].phoneNumber, rows3[i3].smsMessage + openTime + ' minutes!').then(function (response) {
-                                        console.log(response);
-                                    }).fail(function (error) {
-                                        console.log(error);
-                                    });
+                                    // sinchSms.send(rows3[i3].phoneNumber, rows3[i3].smsMessage + openTime + ' minutes!').then(function (response) {
+                                    //     console.log(response);
+                                    client.messages.create({
+                                        body: rows3[i3].smsMessage + openTime + ' minutes!',
+                                        from: '+19092459877',
+                                        to: '+19094524127'
+                                    }).then(function(err, message){
+                                        console.log(message.sid)});
                                 }
                             })
                         }
                         else{
-                            monitorGarageOpen(openId, gId, connection, sinchSms, openTime);
+                            monitorGarageOpen(openId, gId, connection, smsAccountId, smsAccountToken, openTime);
                         }
                     }
                     else{
@@ -208,7 +230,7 @@ server.post('/imageStatus', function(req, res, cb) {
     res.setHeader('Access-Control-Allow-Origin','*');
 
     var sql_query = "update ImageCapture set captureCompleted = '" + dateLocal + "' where imageCaptureId = " + imageCaptureId ;
-    connection.query(sql_query, function(err, rows, fields) {
+    connection.query(sql_query, function(err,  rows, fields) {
         if (err) throw err;
         res.send('imageStatus saved');
     });
