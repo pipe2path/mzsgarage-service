@@ -52,11 +52,12 @@ server.get('/status/', function (req, res, cb) {
 server.get('/openings/', function (req, res, cb) {
 
     var garageid = req.query.id;
+    var numOfRows = req.query.rows;
 
     res.setHeader('Access-Control-Allow-Origin','*');
 
     var sql_query = "select * from GarageStatus " +
-        "where garageid = " + garageid + " order by DateTimeStamp desc limit 0, 10" ;
+        "where garageid = " + garageid + " order by DateTimeStamp desc limit 0, " + numOfRows ;
     connection.query(sql_query, function(err, rows, fields) {
         if (err) throw err;
         res.send(rows);
