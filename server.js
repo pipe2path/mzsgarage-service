@@ -104,16 +104,9 @@ server.post('/update', function(req, res, cb){
             sql_query='select * from configSettings limit 1';
             connection.query(sql_query, function(err, rows2, fields) {
                 if (rows2!=null){
-                    //sinchKey = rows2[0].sinchKey;
-                    //sinchSecret = rows2[0].sinchPwd;
-                    // sinchSms = require('sinch-sms')({
-                    //     key: sinchKey,
-                    //     secret:sinchSecret
-                    // });
                     smsAccountId = rows2[0].smsAccountId;
                     smsAccountToken = rows2[0].smsAccountToken;
                     openTime = rows2[0].garageOpenTimeAlert;
-
                     monitorGarageOpen(rows.insertId.toString(), gId, connection, smsAccountId, smsAccountToken, openTime, function(data){
                         msg = 'text message sent';
                     });
@@ -147,17 +140,18 @@ function monitorGarageOpen(openId, gId, connection, smsAccountId, smsAccountToke
                     if (gStatus == 1){
                         if (parseInt(diffInMins) >= openTime) {
                             // get message configurations
-                            var sql_query_msg = "select * from Garage where garageId = " + gId;
+                            var sql_query_msg = "select * from Contact where garageId = " + gId;
                             connection.query(sql_query_msg, function(err, rows3, fields3){
                                 for(var i3 = 0; i3 < rows3.length; i3++){
-                                    // sinchSms.send(rows3[i3].phoneNumber, rows3[i3].smsMessage + openTime + ' minutes!').then(function (response) {
-                                    //     console.log(response);
-                                    client.messages.create({
-                                        body: rows3[i3].smsMessage + openTime + ' minutes!',
-                                        from: '+19092459877',
-                                        to: '+19094524127'
-                                    }).then(function(err, message){
-                                        console.log(message.sid)});
+                                    if (rows3[i3].enable == 1) {
+                                        client.messages.create({
+                                            body: rows3[i3].message + openTime + ' minutes!',
+                                            from: '+19092459877',
+                                            to: rows3[i3].phoneNumber
+                                        }).then(function (err, message) {
+                                            console.log(message.sid)
+                                        });
+                                    }
                                 }
                             })
                         }
