@@ -141,18 +141,17 @@ function monitorGarageOpen(openId, gId, connection, smsAccountId, smsAccountToke
                         if (parseInt(diffInMins) >= openTime) {
                             // get message configurations
                             var sql_query_msg = "select * from Contact where garageId = " + gId;
-                            connection.query(sql_query_msg, function(err, rows3, fields3){
-                                for(var i3 = 0; i3 < rows3.length; i3++){
-                                    if (rows3[i3].enable == 1) {
+                            connection.query(sql_query_msg, function(err, contact, fields3){
+                                contact.forEach(function(contact){
+                                    if (contact.enable == 1) {
                                         client.messages.create({
-                                            body: rows3[i3].message + openTime + ' minutes!',
+                                            body: contact.message + openTime + ' minutes!',
                                             from: '+19092459877',
-                                            to: rows3[i3].phoneNumber
-                                        }).then(function (err, message) {
-                                            console.log(message.sid)
-                                        });
+                                            to: contact.phoneNumber
+                                        }).then(message => console.log(message.status))
+                                            .done();
                                     }
-                                }
+                                })
                             })
                         }
                         else{
