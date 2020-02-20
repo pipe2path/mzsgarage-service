@@ -15,18 +15,11 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
 var db_config = {
-    host: 'remotemysql.com',
-    user: 'PLGw0qX3uu',
-    password : '517Jli75Ps',
-    database : 'PLGw0qX3uu'
+    host: 'sql3.freemysqlhosting.net',
+    user: 'sql3323656',
+    password : 'BRDhHDSXuC',
+    database : 'sql3323656'
 };
-
-// var db_config_rds = {
-//     host: 'mzs-garage.cnov3xgxiwbf.us-west-2.rds.amazonaws.com',
-//     user: 'pipe2path',
-//     password : 'Bombay79',
-//     database : 'mzs_garage'
-// };
 
 var connection;
 
