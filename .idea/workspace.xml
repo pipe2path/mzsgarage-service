@@ -148,7 +148,9 @@
       <workItem from="1579277061880" duration="1429000" />
       <workItem from="1579845659020" duration="5085000" />
       <workItem from="1580183548768" duration="15380000" />
-      <workItem from="1582040926717" duration="4703000" />
+      <workItem from="1582040926717" duration="6517000" />
+      <workItem from="1582247934028" duration="887000" />
+      <workItem from="1582731215981" duration="596000" />
     </task>
     <task id="LOCAL-00001" summary="updated monitor function to send text msg via sinch. &#10;Changed timer to 10 minutes">
       <created>1479278294782</created>
@@ -206,22 +208,22 @@
     <option name="LAST_COMMIT_MESSAGE" value="temp removal of imageStatus to diagnose &quot;app crashed&quot; issue." />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1899" height="267" key="GridCell.Tab.0.bottom" timestamp="1582177112338">
+    <state width="1899" height="279" key="GridCell.Tab.0.bottom" timestamp="1582731824549">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="267" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582177112338" />
-    <state width="1899" height="267" key="GridCell.Tab.0.center" timestamp="1582177112338">
+    <state width="1899" height="279" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582731824549" />
+    <state width="1899" height="279" key="GridCell.Tab.0.center" timestamp="1582731824548">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="267" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582177112338" />
-    <state width="1899" height="267" key="GridCell.Tab.0.left" timestamp="1582177112338">
+    <state width="1899" height="279" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582731824548" />
+    <state width="1899" height="279" key="GridCell.Tab.0.left" timestamp="1582731824548">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="267" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582177112338" />
-    <state width="1899" height="267" key="GridCell.Tab.0.right" timestamp="1582177112338">
+    <state width="1899" height="279" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582731824548" />
+    <state width="1899" height="279" key="GridCell.Tab.0.right" timestamp="1582731824548">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="267" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582177112338" />
+    <state width="1899" height="279" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1582731824548" />
     <state width="1899" height="267" key="GridCell.Tab.1.bottom" timestamp="1582177112338">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -276,30 +278,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/server.js</url>
-          <line>46</line>
+          <line>55</line>
           <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/server.js</url>
-          <line>135</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/server.js</url>
-          <line>154</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/server.js</url>
-          <line>92</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/server.js</url>
-          <line>102</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

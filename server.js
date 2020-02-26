@@ -14,11 +14,20 @@ var server = restify.createServer();
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
+// freemysqlhosting connection - trial period lasted 7 days. $21/yr
+// var db_config = {
+//     host: 'sql3.freemysqlhosting.net',
+//     user: 'sql3323656',
+//     password : 'BRDhHDSXuC',
+//     database : 'sql3323656'
+// };
+
+// remotemysql connection - is back up as of 2/27/2020
 var db_config = {
-    host: 'sql3.freemysqlhosting.net',
-    user: 'sql3323656',
-    password : 'BRDhHDSXuC',
-    database : 'sql3323656'
+    host: 'remotemysql.com',
+    user: 'PLGw0qX3uu',
+    password : '517Jli75Ps',
+    database : 'PLGw0qX3uu'
 };
 
 var connection;
