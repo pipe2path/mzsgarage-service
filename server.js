@@ -14,20 +14,12 @@ var server = restify.createServer();
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
-// freemysqlhosting connection - trial period lasted 7 days. $21/yr
-// var db_config = {
-//     host: 'sql3.freemysqlhosting.net',
-//     user: 'sql3323656',
-//     password : 'BRDhHDSXuC',
-//     database : 'sql3323656'
-// };
-
-// remotemysql connection - is back up as of 2/27/2020
+// heroku-MariaDB connection - created 2020-03-09
 var db_config = {
-    host: 'remotemysql.com',
-    user: 'PLGw0qX3uu',
-    password : '517Jli75Ps',
-    database : 'PLGw0qX3uu'
+    host: 'mcldisu5ppkm29wf.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'a2mnqkcvn0eph6uf',
+    password : 'm184whf9tjdq5hvx',
+    database : 'mpu2bjdgmcbt51uv'
 };
 
 var connection;
