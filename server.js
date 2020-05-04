@@ -14,12 +14,11 @@ var server = restify.createServer();
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
-// heroku-MariaDB connection - created 2020-03-09
 var db_config = {
-    host: 'mcldisu5ppkm29wf.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-    user: 'a2mnqkcvn0eph6uf',
-    password : 'm184whf9tjdq5hvx',
-    database : 'mpu2bjdgmcbt51uv'
+    host: process.env.HOST,
+    user: process.env.USER,
+    password : process.env.PWD,
+    database : process.env.DATABASE
 };
 
 var connection;
@@ -118,7 +117,7 @@ function monitorGarageOpen(openId, gId, connection, smsAccountId, smsAccountToke
     var sql_query = "select garageStatusId, dateTimeStamp, status from GarageStatus where garageStatusId = " + openId + " and garageId = " + gId ;
     connection.query(sql_query, function(err, rows, fields) {
         if (err) {
-            console.log('OpenId: ' + openId + ' garageId: ' + gId);
+            console.log('OpenId: ' + openId + ' garageId: ' +  gId);
             console.log(sql_query + " Error: " + err);
         }
         if (rows != null){
