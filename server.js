@@ -6,7 +6,6 @@ var json = '';
 var path = require("path");
 var fs = require("fs");
 var aws = require('aws-sdk');
-var sinchSms = require('sinch-sms');
 
 // create an HTTP server.
 var server = restify.createServer();
@@ -14,12 +13,20 @@ var server = restify.createServer();
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
+// heroku-MariaDB connection - created 2020-03-09
 var db_config = {
-    host: process.env.HOST,
-    user: process.env.USER,
-    password : process.env.PWD,
-    database : process.env.DATABASE
+    host: 'mcldisu5ppkm29wf.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'a2mnqkcvn0eph6uf',
+    password : 'm184whf9tjdq5hvx',
+    database : 'mpu2bjdgmcbt51uv'
 };
+
+// var db_config = {
+//     host: process.env.HOST,
+//     user: process.env.USER,
+//     password : process.env.PWD,
+//     database : process.env.DATABASE
+// };
 
 var connection;
 
