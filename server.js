@@ -92,12 +92,10 @@ server.post('/update', function(req, res, cb){
     res.setHeader('Access-Control-Allow-Origin','*');
 
     var msg = "status updated";
-    //var sinchKey;
-    //var sinchSecret;
     var openTime = 5;
     var smsAccountId = '';
     var smsAccountToken = '';
-    var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" +statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
+    var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
     connection.query(sql_query, function(err, rows, fields) {
         if (err) throw err;
         if (statusData.status = 1){
@@ -107,9 +105,10 @@ server.post('/update', function(req, res, cb){
                     smsAccountId = rows2[0].smsAccountId;
                     smsAccountToken = rows2[0].smsAccountToken;
                     openTime = rows2[0].garageOpenTimeAlert;
-                    monitorGarageOpen(rows.insertId.toString(), gId, connection, smsAccountId, smsAccountToken, openTime, function(data){
-                        msg = 'text message sent';
-                    });
+                    setTimeout(sendOpenAlertMsg, 60000 * openTime, statusData.garageid, openTime, smsAccountId, smsAccountToken)
+                    //monitorGarageOpen(rows.insertId.toString(), gId, connection, smsAccountId, smsAccountToken, openTime, function(data){
+                    //    msg = 'text message sent';
+                    //});
                 }
             });
         }
@@ -117,6 +116,24 @@ server.post('/update', function(req, res, cb){
     });
 })
 
+function sendOpenAlertMsg(garageId, openTime, smsAccountId, smsAccountToken){
+    var sql = "select * from Contact where garageId = " + garageId;
+    connection.query(sql, function(err, contact, fields3){
+        contact.forEach(function(contact) {
+            if (contact.enable == 1) {
+                var client = require('twilio')(smsAccountId, smsAccountToken);
+                client.messages.create({
+                    body: contact.message + openTime + ' minutes!',
+                    from: '+19092459877',
+                    to: contact.phoneNumber
+                }).then(message => console.log(message.status))
+                    .done();
+            }
+        })
+    })
+}
+
+// deprecated for a simpler version "SendOpenAlertMsg".
 function monitorGarageOpen(openId, gId, connection, smsAccountId, smsAccountToken, openTime){
     var openTooLong = false;
     var client = require('twilio')(smsAccountId, smsAccountToken);
