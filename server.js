@@ -98,39 +98,49 @@ server.post('/update', function(req, res, cb){
     var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
     connection.query(sql_query, function(err, rows, fields) {
         if (err) throw err;
-        if (statusData.status = 1){
-            sql_query='select * from configSettings limit 1';
-            connection.query(sql_query, function(err, rows2, fields) {
-                if (rows2!=null){
-                    smsAccountId = rows2[0].smsAccountId;
-                    smsAccountToken = rows2[0].smsAccountToken;
-                    openTime = rows2[0].garageOpenTimeAlert;
-                    setTimeout(sendOpenAlertMsg, 60000 * openTime, statusData.garageid, openTime, smsAccountId, smsAccountToken)
-                    //monitorGarageOpen(rows.insertId.toString(), gId, connection, smsAccountId, smsAccountToken, openTime, function(data){
-                    //    msg = 'text message sent';
-                    //});
+        sql_query='select * from configSettings limit 1';
+        connection.query(sql_query, function(err, rows2, fields) {
+            if (rows2!=null){
+                smsAccountId = rows2[0].smsAccountId;
+                smsAccountToken = rows2[0].smsAccountToken;
+                openTime = rows2[0].garageOpenTimeAlert;
+                if (rows.insertId) {
+                   sendOpenAlertMsg(statusData.garageid, openTime, smsAccountId, smsAccountToken);
                 }
-            });
-        }
+                // monitorGarageOpen(rows.insertId.toString(), gId, connection, smsAccountId, smsAccountToken, openTime, function(data){
+                //     msg = 'text message sent';
+                // });
+            }
+        });
         res.send(msg);
     });
 })
 
 function sendOpenAlertMsg(garageId, openTime, smsAccountId, smsAccountToken){
-    var sql = "select * from Contact where garageId = " + garageId;
-    connection.query(sql, function(err, contact, fields3){
-        contact.forEach(function(contact) {
-            if (contact.enable == 1) {
-                var client = require('twilio')(smsAccountId, smsAccountToken);
-                client.messages.create({
-                    body: contact.message + openTime + ' minutes!',
-                    from: '+19092459877',
-                    to: contact.phoneNumber
-                }).then(message => console.log(message.status))
-                    .done();
+    setTimeout(function(){
+        var sql_query = "select status from GarageStatus where garageId = " + garageId + " order by dateTimeStamp desc limit 1";
+        connection.query(sql_query, function (err, rows, fields) {
+            if (err) {
+                console.log(sql_query + " Error: " + err);
+            }
+            if (rows[0].status == 1) {
+                var sql = "select * from Contact where garageId = " + garageId;
+                connection.query(sql, function (err, contact, fields3) {
+                    contact.forEach(function (contact) {
+                        if (contact.enable == 1) {
+                            var client = require('twilio')(smsAccountId, smsAccountToken);
+                            client.messages.create({
+                                body: contact.message + openTime + ' minutes!',
+                                from: '+19092459877',
+                                to: contact.phoneNumber
+                            }).then(message => console.log(message.status))
+                                .done();
+                        }
+                    })
+                })
             }
         })
-    })
+    }, 60000 * openTime);
 }
 
 // deprecated for a simpler version "SendOpenAlertMsg".
