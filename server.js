@@ -116,6 +116,43 @@ server.post('/update', function(req, res, cb){
     });
 })
 
+server.post('/updateWithBody', function(req, res, cb){
+
+    var statusData = {};
+    var dateLocal = (new Date ((new Date((new Date(new Date())).toISOString() )).getTime() -
+        ((new Date()).getTimezoneOffset()*60000))).toISOString().slice(0, 19).replace('T', ' ');
+    statusData.garageid = req.body.id;
+    statusData.datetimestamp = dateLocal;
+    statusData.status = req.body.status;
+    var gId = statusData.garageid;
+
+    res.setHeader('Access-Control-Allow-Origin','*');
+
+    var msg = "status updated";
+    var openTime = 5;
+    var smsAccountId = '';
+    var smsAccountToken = '';
+    var sql_query = "insert GarageStatus (garageId, dateTimeStamp, status) values (" + statusData.garageid + ", '" + statusData.datetimestamp + "', " + statusData.status + ")";
+    connection.query(sql_query, function(err, rows, fields) {
+        if (err) throw err;
+        sql_query='select * from configSettings limit 1';
+        connection.query(sql_query, function(err, rows2, fields) {
+            if (rows2!=null){
+                smsAccountId = rows2[0].smsAccountId;
+                smsAccountToken = rows2[0].smsAccountToken;
+                openTime = rows2[0].garageOpenTimeAlert;
+                if (rows.insertId) {
+                   sendOpenAlertMsg(statusData.garageid, openTime, smsAccountId, smsAccountToken);
+                }
+                // monitorGarageOpen(rows.insertId.toString(), gId, connection, smsAccountId, smsAccountToken, openTime, function(data){
+                //     msg = 'text message sent';
+                // }); 
+            }
+        });
+        res.send(msg);
+    });
+})
+
 function sendOpenAlertMsg(garageId, openTime, smsAccountId, smsAccountToken){
     setTimeout(function(){
         var sql_query = "select status from GarageStatus where garageId = " + garageId + " order by dateTimeStamp desc limit 1";
